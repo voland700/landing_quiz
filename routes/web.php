@@ -37,6 +37,9 @@ Route::get('/', [App\Http\Controllers\Front\IndexController::class, 'index'])->n
 
 Route::group(['namespace'=>'App\Http\Controllers\Admin', 'prefix'=>'admin'], function () {
     Route::get('/', 'MainController@index')->name('admin.index');
+
+    Route::resource('products', ProductController::class);
+    Route::resource('properties', PropertyController::class);
 });
 
 
