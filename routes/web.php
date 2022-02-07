@@ -33,13 +33,15 @@ Route::get('/clear', function() {
 })->name('clear.cash');
 
 Route::get('/', [App\Http\Controllers\Front\IndexController::class, 'index'])->name('index');
-
+Route::post('/product_detail', [App\Http\Controllers\Front\IndexController::class, 'detail'])->name('product.detail');
 
 Route::group(['namespace'=>'App\Http\Controllers\Admin', 'prefix'=>'admin'], function () {
     Route::get('/', 'MainController@index')->name('admin.index');
-
     Route::resource('products', ProductController::class);
+    Route::post('/products-remove-img','ProductController@remove_img')->name('products.remove.img');
     Route::resource('properties', PropertyController::class);
+    Route::resource('steps', StepController::class);
+    Route::resource('questions', QuestionController::class);
 });
 
 

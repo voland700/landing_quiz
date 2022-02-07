@@ -23,6 +23,23 @@
 
     </ul>
 </li>
-
+<li class="nav-header">Квест</li>
+<li class="nav-item menu-is-opening menu-open">
+    <a href="#" class="nav-link">
+        <i class="nav-icon fab fa-artstation"></i>
+        <p>
+            Квест
+            <i class="right fas fa-angle-left"></i>
+        </p>
+    </a>
+    <ul class="nav nav-treeview" style="display: block;">
+        <li class="nav-item">
+            <a href="{{route('steps.index')}}" class="nav-link">
+                <i class="fas fa-align-justify nav-icon"></i>
+                <p>Шаги</p>
+            </a>
+        </li>
+    </ul>
+</li>
 
 

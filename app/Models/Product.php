@@ -53,22 +53,6 @@ class Product extends Model
         if (!$this->img) {
             return asset("/images/src/no-photo.jpg");
         }
-        return asset("uploads/{$this->img}");
+        return asset("storage/{$this->img}");
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

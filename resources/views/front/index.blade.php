@@ -139,103 +139,42 @@
 
     </section>
 
+    <script>
+
+
+
+    </script>
+
+
+@if($products)
     <section class="product">
         <div class="container product_container">
             <h2 class="product_title"><span>Популярные печи</span> в наличии</h2>
 
             <div class="product_wrap">
+                @foreach($products as $product)
                 <div class="product_item">
                     <div class="product_img_wrap">
                         <span class="product_lable_wrap">
-                            <span class="product_lable top">Топ</span>
+                            @if($product->hit)<span class="product_lable hit">Хит</span>@endif
+                            @if($product->top)<span class="product_lable top">Топ</span>@endif
+                            @if($product->gift)<span class="product_lable gift">Подарок</span>@endif
+                            @if($product->stock) <span class="product_lable sale">Акция</span>@endif
                         </span>
-                        <img src="/images/src/stove/100-dt-3.png" alt="Печь" class="product_img">
+                        <img src="{{ $product->getImage() }}" alt="{{$product->name}}" class="product_img elem" data-id="{{$product->id}}">
                     </div>
-                    <h3 class="product_h3">Печь отопительная Везувий «Комфорт 100» (ДТ-3)</h3>
-                    <div class="product_summary">Отопительная конвекционная печь «Везувий Комфорт 100» предназначена для отопления жилых и хозяйственных помещений объемом до 100 м<sup>3</sup>.</div>
+                    <h3 class="product_h3 elem" data-id="{{$product->id}}">{{$product->name}}</h3>
+                    <div class="product_summary">{!! $product->summary !!}</div>
                     <div class="product_btn_block">
                         <a href="#" class="product_btn ask">Узнать цену</a>
-                        <a href="#" class="product_btn more">Подробнее</a>
+                        <a href="#" class="product_btn more elem" data-id="{{$product->id}}">Подробнее</a>
                     </div>
                 </div>
-
-                <div class="product_item">
-                    <div class="product_img_wrap">
-                        <img src="/images/src/stove/pk-01-270.png" alt="Печь" class="product_img">
-                    </div>
-                    <h3 class="product_h3">Печь-Камин ВЕЗУВИЙ ПК-01 (270) беж. 9 кВт (150 м3) Ø 115 мм</h3>
-                    <div class="product_summary">Отопительная, варочная печь-камин Везувий ПК-01(270) с плитой и большим стеклом, мощностью 9 кВт, рассчитана на обогрев помещения до 150 м<sup>3</sup>.</div>
-                    <div class="product_btn_block">
-                        <a href="#" class="product_btn ask">Узнать цену</a>
-                        <a href="#" class="product_btn more">Подробнее</a>
-                    </div>
-                </div>
-
-                <div class="product_item">
-                    <div class="product_img_wrap">
-                        <span class="product_lable_wrap">
-                            <span class="product_lable sale">Акция</span>
-                        </span>
-                        <img src="/images/src/stove/everest_7.png" alt="Печь" class="product_img">
-                    </div>
-                    <h3 class="product_h3">Чугунная печь-камин EVEREST F7</h3>
-                    <div class="product_summary">Чугунная печь-камин EVEREST F7 длительного горения, мощностью 7 кВт, для отопления помещений загородного дома объемом до 140 м<sup>3</sup>.</div>
-                    <div class="product_btn_block">
-                        <a href="#" class="product_btn ask">Узнать цену</a>
-                        <a href="#" class="product_btn more">Подробнее</a>
-                    </div>
-                </div>
-
-                <div class="product_item">
-                    <div class="product_img_wrap">
-                        <img src="/images/src/stove/3tdbp.png" alt="Печь" class="product_img">
-                    </div>
-                    <h3 class="product_h3">Чугунная печь-камин JOTUL F3 TD BP</h3>
-                    <div class="product_summary">Чугунный Норвежский камин Jotul F3 TD BP длительного горения, мощностью до 10 кВт, отапливает помещение до 130 м<sup>3</sup>.</div>
-                    <div class="product_btn_block">
-                        <a href="#" class="product_btn ask">Узнать цену</a>
-                        <a href="#" class="product_btn more">Подробнее</a>
-                    </div>
-                </div>
-
-                <div class="product_item">
-                    <div class="product_img_wrap">
-                        <span class="product_lable_wrap">
-                            <span class="product_lable gift">Подарок</span>
-                            <span class="product_lable hit">Хит</span>
-                        </span>
-                        <img src="/images/src/stove/2110.png" alt="Печь" class="product_img">
-                    </div>
-                    <h3 class="product_h3">Чугунная печь-камин MORSO 2110</h3>
-                    <div class="product_summary">Чугунный Датский камин Morso 2110 с красивым горением, мощностью до 8 кВт, отапливает помещения дома до 120 м<sup>3</sup>.</div>
-                    <div class="product_btn_block">
-                        <a href="#" class="product_btn ask">Узнать цену</a>
-                        <a href="#" class="product_btn more">Подробнее</a>
-                    </div>
-                </div>
-
-                <div class="product_item">
-                    <div class="product_img_wrap">
-                        <img src="/images/src/stove/373.png" alt="Печь" class="product_img">
-                    </div>
-                    <h3 class="product_h3">Печь-камин Jotul F373 CB BP</h3>
-                    <div class="product_summary">Современная печь-камин JOTUL F373 CB BP длительного горения, с двойным дожигом, 3-мя стеклами, отапливает помещения площадью до 120 м<sup>2</sup>.</div>
-                    <div class="product_btn_block">
-                        <a href="#" class="product_btn ask">Узнать цену</a>
-                        <a href="#" class="product_btn more">Подробнее</a>
-                    </div>
-                </div>
-
+                @endforeach
             </div>
         </div>
-
-
-
-
-
-
     </section>
-
+@endif
     <section class="advice" style="background-image: url(/images/src/SLID_2.jpg)">
         <div class="advice_overlay"></div>
         <div class="advice_content paralax">

@@ -5,9 +5,10 @@
     <title>Отопительные печи и камины - дровяные камины для Вашего дома, продажа, доставка монтаж</title>
     <meta name="description" content="Продажа печей и камнов по выгодным ценам, магазин отопительных печей, каминов в Москве. Большой выбор печей для дома и дачи. Доставка и монтаж">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="icon" href="{{asset("images/favicon.png")}}>
-    <meta property="og:image" content="images/dist/preview.jpg">
+    <link rel="icon" href="{{asset("/images/favicon.png")}}">
+
 
     <link rel="stylesheet" href="css/main.css">
 

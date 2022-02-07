@@ -105,7 +105,12 @@
                                         <label class="custom-file-label" for="img">Choose file</label>
                                     </div>
                                 </div>
-                                <div><img src="{{ $product->getImage() }}" alt="" class="img-thumbnail mt-2" width="200"></div>
+                                <div class="admin_img_wrap">
+                                    @if($product->img)
+                                        <span class="admin_img_btn" id="imgRemove"><i class="fas fa-times"></i></span>
+                                    @endif
+                                    <img id="proguctImg" src="{{ $product->getImage() }}" alt="" class="img-thumbnail mt-2 admin_img">
+                                </div>
                             </div>
 
                         </div>
@@ -208,5 +213,44 @@
             namber++;
             document.getElementById('propertiesList').append(tmpl);
         })
+
+        if(document.getElementById('imgRemove')){
+            document.getElementById('imgRemove').addEventListener('click', function (event){
+                event.preventDefault();
+                let data = {
+                    id: {{$product->id}},
+                    _token: document.querySelector('meta[name=csrf-token]').content
+                }
+
+                async function postData(url = '', data = {}) {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        cache: 'no-cache',
+                        headers: {
+                            'Content-Type': 'application/json'
+                            //'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        redirect: 'follow', // manual, *follow, error
+                        body: JSON.stringify(data) // body data type must match "Content-Type" header
+                    });
+                    return response.json(); // parses JSON response into native JavaScript objects
+                }
+
+                postData('{{route('products.remove.img')}}', data)
+                    .then(data => {
+                        //console.log(data); // JSON data parsed by `data.json()` call
+                        document.getElementById('imgRemove').remove();
+                        document.getElementById('proguctImg').src = '/images/src/no-photo.jpg';
+                        //console.log(data);
+                    });
+            });
+        }
+
+
+
+
+
+
+
     </script>
 @endsection

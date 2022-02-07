@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductsRequest;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Property;
@@ -44,9 +45,9 @@ class ProductController extends Controller
         $data = $request->all();
         $data['active'] = $request->has('active') ? 1 : 0;
         $data['hit'] = $request->has('hit') ? 1 : 0;
-        $data['top'] = $request->has('new') ? 1 : 0;
+        $data['top'] = $request->has('top') ? 1 : 0;
         $data['stock'] = $request->has('stock') ? 1 : 0;
-        $data['gift'] = $request->has('advice') ? 1 : 0;
+        $data['gift'] = $request->has('gift') ? 1 : 0;
 
         $properties = [];
         if($data['properties']){
@@ -94,9 +95,31 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductsRequest $request, $id)
     {
-        //
+        $product = Product::find($id);
+        $data = $request->all();
+        $data['active'] = $request->has('active') ? 1 : 0;
+        $data['hit'] = $request->has('hit') ? 1 : 0;
+        $data['top'] = $request->has('top') ? 1 : 0;
+        $data['stock'] = $request->has('stock') ? 1 : 0;
+        $data['gift'] = $request->has('gift') ? 1 : 0;
+
+        $properties = [];
+        if($data['properties']){
+            foreach ($data['properties'] as $key => $property){
+                if($property['value'] !== null){
+                    $properties[$key] = $property;
+                }
+            }
+        }
+        $data['properties'] = json_encode($properties,JSON_UNESCAPED_UNICODE);
+
+        if ($file = Product::uploadImage($request, $product->img)) {
+            $data['img'] = $file;
+        }
+        $product->update($data);
+        return redirect()->route('products.index')->with('success', 'Данные товара успешно изменены');
     }
 
     /**
@@ -107,6 +130,20 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+        if ($product->img && Storage::disk('public')->exists($product->img)){
+            Storage::disk('public')->delete($product->img);
+        }
+        $product->delete();
+        return redirect()->route('products.index')->with('success', 'Товар удален');
+    }
+
+    public function remove_img(Request $request)
+    {
+        $product = Product::find($request->id);
+        Storage::delete($product->img);
+        $product->img = null;
+        $product->update();
+        return $request->id;
     }
 }
