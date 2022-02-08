@@ -1,10 +1,10 @@
 @extends('admin.layouts.layout')
 
-@section('title', 'Админ-панель - Список характеристик товаров')
-@section('h1', 'Список характеристик для товаров')
+@section('title', 'Админ-панель - Список бонусов за квест')
+@section('h1', 'Список бонусов за прохождение квеста')
 
 @section('content')
-    <div class="col-md-6">
+    <div class="col-md-9">
         @if ($message = Session::get('success'))
             <div class="alert alert-success alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -22,25 +22,34 @@
                 </div>
             </div>
             <div class="card-body">
-                <a href="{{route('properties.create')}}" type="button" class="btn btn-primary mb-3">Добавить</a>
+                <a href="{{route('benefits.create')}}" type="button" class="btn btn-primary mb-3">Добавить</a>
                 <table class="table table-bordered">
                     <thead>
                     <tr>
                         <th style="width: 10px">N</th>
                         <th>Наименование</th>
+                        <th style="width: 20px">Active</th>
                         <th style="width: 20px">Сортировка</th>
                         <th style="width: 120px">Редактировать</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach ($properties as $property)
+                    @foreach ($benefits as $benefit)
                         <tr>
                             <td>{{$loop->iteration}}</td>
-                            <td>{{$property->name}}</td>
-                            <td class="text-center">{{$property->sort}}</td>
+                            <td>{{$benefit->name}}</td>
+                            <td class="text-center">
+                                @if ($benefit->active === 0)
+                                    <span class="pale-icon"><i class="far fa-check-circle"></i></span>
+                                @endif
+                                @if ($benefit->active === 1)
+                                    <span class="green-icon"><i class="far fa-check-circle"></i></span>
+                                @endif
+                            </td>
+                            <td class="text-center">{{$benefit->sort}}</td>
                             <td>
-                                <a href="{{ route('properties.edit', $property->id) }}" class="btn btn-info btn-sm"><i class="fas fa-pencil-alt"></i></a>
-                                <form method="POST" action="{{ route('properties.destroy', $property->id) }}" class="formDelete">
+                                <a href="{{ route('benefits.edit', $benefit->id) }}" class="btn btn-info btn-sm"><i class="fas fa-pencil-alt"></i></a>
+                                <form method="POST" action="{{ route('benefits.destroy', $benefit->id) }}" class="formDelete">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm delete" onclick="return confirm('Подтвердите удаление')"><i class="fas fa-trash-alt"></i></button>

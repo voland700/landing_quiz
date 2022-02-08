@@ -23,6 +23,14 @@ class Step extends Model
         return $this->hasMany(Question::class);
     }
 
+    public function benefits()
+    {
+        return  Benefit::where('active', 1)->select('name', 'img')->orderBy('sort')->limit(5)->get();
+    }
+
+
+
+
 
 
 }

@@ -22,13 +22,22 @@
                 </div>
             </div>
         @endif
+        @if ($message = Session::get('success'))
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <p>{{ $message }}</p>
+            </div>
+        @endif
     </div>
-
-    <form id="create" role="form" method="post" action="{{ route('steps.update', $step->id) }}">
-        @csrf
-        @method('PUT')
         <div class="row">
+
+
             <div class="col-md-6"><!-- Start cart -->
+                <form role="form" method="post" action="{{ route('steps.update', $step->id) }}">
+                    @csrf
+                    @method('PUT')
+
+
                 <div class="card">
                     <div class="card-header">
                         <a href="{{ route('steps.index') }}" class="float-left mr-2"><i class="fas fa-arrow-alt-circle-left"></i></a>
@@ -95,10 +104,10 @@
                     </div>
 
                     <div class="card-footer clearfix">
-                        <p></p>
+                        <button type="submit" class="btn btn-primary mt-3">Обновить</button>
                     </div>
                 </div><!--//END Основные данные -->
-
+            </form>
             </div><!-- END ROW -->
 
 
@@ -135,10 +144,21 @@
                             </tbody>
                         </table>
                         <h6>Добавить новые вопросы</h6>
-                        <div id="propertiesList"></div>
-                        <div class="row pt-3">
-                            <div class="col-6"><button class="btn btn-outline-secondary btn-sm" id="addProperties">Добавить</button></div>
-                        </div>
+                        <form action="{{route('questions.add')}}" method="post" name="questions">
+                            @csrf
+                            <input type="hidden" name="step_id" value="{{$step->id}}">
+                            <div id="propertiesList">
+                            </div>
+                            <div class="row pt-3">
+                                <div class="col-6">
+                                    <button class="btn btn-outline-secondary btn-sm mr-1" id="addProperties">Добавить</button>
+                                    <button type="submit" class="btn btn-primary btn-sm" id="questionsBtn" style="display: none">Обновить</button>
+                                </div>
+                            </div>
+                        </form>
+                        @csrf
+
+
                     </div>
 
                         <template id="tmplProperty">
@@ -156,8 +176,7 @@
                 </div><!-- END Характеристики товара -->
             </div><!-- END ROW col-6 -->
         </div><!-- END ROW col-12 -->
-        <button type="submit" class="btn btn-primary mt-3">Обновить</button>
-    </form>
+
 
 @endsection
 
@@ -167,6 +186,9 @@
         let namber = 100;
         document.getElementById('addProperties').addEventListener('click', function (e){
             e.preventDefault();
+
+            let questionsBtn = document.getElementById('questionsBtn');
+            if(questionsBtn.style.display == 'none') questionsBtn.style.display = 'inline-block';
             let tmpl = tmplProperty.content.cloneNode(true);
             tmpl.querySelector('.name').setAttribute('name', 'questions['+namber+'][name]');
             tmpl.querySelector('.value').setAttribute('name', 'questions['+namber+'][sort]');

@@ -2,6 +2,10 @@
     position: relative;
     width: 200px;
 }
+.benefit_img_wrap{
+    position: relative;
+    width: 70px;
+}
 .admin_img{
     width: 100%;
     height: auto;
@@ -18,4 +22,13 @@
 }
 .admin_img_btn i {
     color: darkred;
+}
+.formDelete{
+    display: inline-block;
+}
+.green-icon {
+    color: #00913b;
+}
+.pale-icon {
+    color: #d8d8d8;
 }

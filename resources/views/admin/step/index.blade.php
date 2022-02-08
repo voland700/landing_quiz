@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <a href="{{route('steps.create')}}" type="button" class="btn btn-primary mb-3">Создать товар</a>
+                <a href="{{route('steps.create')}}" type="button" class="btn btn-primary mb-3">Создать шаг</a>
 
                 <table class="table table-bordered">
                     <thead>
@@ -40,7 +40,7 @@
                             <tr>
                                 <td class="text-center">{{$step->id}}</td>
                                 <td><a href="{{route("steps.edit", $step->id)}}">{{$step->name}}</a></td>
-                                <td>
+                                <td class="text-center">
                                     @if ($step->active === 0)
                                         <span class="pale-icon"><i class="far fa-check-circle"></i></span>
                                     @endif

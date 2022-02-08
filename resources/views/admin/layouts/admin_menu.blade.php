@@ -1,4 +1,3 @@
-<li class="nav-header">Товары</li>
 <li class="nav-item menu-is-opening menu-open">
     <a href="#" class="nav-link">
         <i class="nav-icon far fa-list-alt"></i>
@@ -23,7 +22,6 @@
 
     </ul>
 </li>
-<li class="nav-header">Квест</li>
 <li class="nav-item menu-is-opening menu-open">
     <a href="#" class="nav-link">
         <i class="nav-icon fab fa-artstation"></i>
@@ -39,6 +37,18 @@
                 <p>Шаги</p>
             </a>
         </li>
+
+        <li class="nav-item">
+            <a href="{{route('benefits.index')}}" class="nav-link">
+                <i class="fas fa-gift nav-icon"></i>
+                <p>Бонусы</p>
+            </a>
+        </li>
+
+
+
+
+
     </ul>
 </li>
 

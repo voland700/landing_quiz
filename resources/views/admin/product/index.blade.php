@@ -40,7 +40,7 @@
                             <tr>
                                 <td class="text-center">{{$product->id}}</td>
                                 <td><a href="{{route("products.edit", $product->id)}}">{{$product->name}}</a></td>
-                                <td>
+                                <td class="text-center">
                                     @if ($product->active === 0)
                                         <span class="pale-icon"><i class="far fa-check-circle"></i></span>
                                     @endif

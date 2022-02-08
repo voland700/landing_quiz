@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\ProductsRequest;
-use App\Models\Step;
-use App\Models\Question;
+use App\Models\Benefit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
-class StepController extends Controller
+class BenefitController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +17,8 @@ class StepController extends Controller
      */
     public function index()
     {
-        $steps = Step::orderBy('sort', 'asc')->paginate(40);
-        return view('admin.step.index', compact( 'steps'));
+        $benefits = Benefit::orderBy('sort', 'asc')->paginate(20);
+        return view('admin.benefit.index', compact( 'benefits'));
     }
 
     /**
@@ -28,7 +28,7 @@ class StepController extends Controller
      */
     public function create()
     {
-        return view('admin.step.create');
+        return view('admin.benefit.create');
     }
 
     /**
@@ -41,21 +41,9 @@ class StepController extends Controller
     {
         $data = $request->all();
         $data['active'] = $request->has('active') ? 1 : 0;
-        $data['obligatory'] = $request->has('obligatory') ? 1 : 0;
-        $data['extra'] = $request->has('extra') ? 1 : 0;
-        $step = Step::create($data);
-        if($data['questions']){
-            foreach ($data['questions'] as $key => $question){
-                if($question['name'] !== null){
-                    \App\Models\Question::create([
-                        'step_id' => $step->id,
-                        'name' => $question['name'],
-                        'sort' => is_int((int)$question['sort']) ? (int)$question['sort'] : 50
-                    ]);
-                }
-            }
-        }
-        return redirect()->route('steps.index')->with('success', 'Новый квест созздан');
+        $data['img'] = Benefit::uploadImage($request);
+        Benefit::create($data);
+        return redirect()->route('benefits.index')->with('success', 'Преимущество добавлено');
     }
 
     /**
@@ -66,7 +54,7 @@ class StepController extends Controller
      */
     public function show($id)
     {
-       //
+        //
     }
 
     /**
@@ -77,8 +65,8 @@ class StepController extends Controller
      */
     public function edit($id)
     {
-        $step = Step::with('questions')->find($id);
-        return view('admin.step.update', compact('step'));
+        $benefit = Benefit::find($id);
+        return view('admin.benefit.update', compact('benefit'));
     }
 
     /**
@@ -90,14 +78,14 @@ class StepController extends Controller
      */
     public function update(ProductsRequest $request, $id)
     {
-        $step = Step::with('questions')->find($id);
+        $benefit = Benefit::find($id);
         $data = $request->all();
         $data['active'] = $request->has('active') ? 1 : 0;
-        $data['obligatory'] = $request->has('obligatory') ? 1 : 0;
-        $data['extra'] = $request->has('extra') ? 1 : 0;
-        $step->update($data);
-        return redirect()->route('steps.index')->with('success', 'Данные успешно изменены');
-
+        if ($file = Benefit::uploadImage($request, $benefit->img)) {
+            $data['img'] = $file;
+        }
+        $benefit->update($data);
+        return redirect()->route('benefits.index')->with('success', 'Данные приемущества успешно изменены');
     }
 
     /**
@@ -108,9 +96,21 @@ class StepController extends Controller
      */
     public function destroy($id)
     {
-        $step = Step::find($id);
-        $step->delete();
-        return redirect()->route('steps.index')->with('success', 'Шаг квеста удален');
-
+        $benefit = Benefit::find($id);
+        if ($benefit->img && Storage::disk('public')->exists($benefit->img)){
+            Storage::disk('public')->delete($benefit->img);
+        }
+        $benefit->delete();
+        return redirect()->route('benefits.index')->with('success', 'Преимущество удалено');
     }
+    public function remove_img(Request $request)
+    {
+        $benefit = Benefit::find($request->id);
+        Storage::delete($benefit->img);
+        $benefit->img = null;
+        $benefit->update();
+        return $request->id;
+    }
+
+
 }
