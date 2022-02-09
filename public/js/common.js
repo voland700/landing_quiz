@@ -116,9 +116,126 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('.detail_container').remove();
             detail.classList.toggle("show");
         });
+    }
 
+    //QUIZ - модальное окно, обмен данными
+    const modal = document.getElementById('modal');
+    const stepBody = document.getElementById('stepBody');
+
+    document.querySelector('.quest_btn_close').addEventListener('click', function (e) {
+        e.preventDefault();
+        modal.classList.toggle("show");
+    });
+
+
+    document.querySelectorAll('.start').forEach((item) => {
+        item.addEventListener('click', function (e) {
+
+            getProduct('/quiz', {
+                _token: document.querySelector('meta[name=csrf-token]').content,
+                option: 'start'
+            }) .then((data) => {
+                stepBody.innerHTML = '';
+                stepBody.insertAdjacentHTML('beforeend', data);
+                modal.classList.toggle("show");
+
+                //console.log(data);
+                choiceExtra();
+                activeBtn();
+                nextQuiz();
+
+
+            });
+        })
+    })
+
+    function nextQuiz(){
+        const btn = document.getElementById('btnNext');
+        btn.addEventListener('click', function (e){
+            e.preventDefault();
+            if(!btn.disabled){
+                getProduct('/quiz', {
+                    //method: 'POST',
+                    _method: "POST",
+                    _token: document.querySelector('meta[name=csrf-token]').content,
+                    body: new FormData(formBody),
+                    option: 'next',
+                    data: serializeForm(formBody)
+
+                }) .then((data) => {
+                    stepBody.innerHTML = '';
+                    stepBody.insertAdjacentHTML('beforeend', data);
+                    console.log(data);
+                    choiceExtra();
+                    activeBtn();
+                });
+            }
+        });
 
     }
+
+    function serializeForm(formNode) {
+        return new FormData(formNode)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // действия с доплнительным полем Input  - extra
+    function choiceExtra(){
+        if(document.getElementById('extraRadio')){
+            document.getElementById('extraText').onfocus = function () {
+                document.getElementById('extraRadio').checked = true;
+                if (document.getElementById('btnNext').hasAttribute('disabled')) document.getElementById('btnNext').removeAttribute('disabled');
+            }
+        }
+    }
+
+    //кнопка - Next активная при выборе варианта
+    function activeBtn(){
+        const btn = document.getElementById('btnNext');
+        if(btn.disabled){
+            const items = document.querySelectorAll('input[name="item"]');
+            items.forEach((item)=>{
+                item.addEventListener('change', function () {
+                    btn.disabled = false;
+                });
+            });
+        }
+        if (document.getElementById('textMessage')) {
+            let textMessage = document.getElementById('textMessage');
+            if (textMessage.value == '') {
+                textMessage.oninput = function () {
+                    if (btn.disabled) {
+                        btn.disabled = false;
+                    } else {
+                        return false;
+                    }
+                };
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

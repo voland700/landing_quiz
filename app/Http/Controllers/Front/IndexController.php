@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Step;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Arr;
 
 class IndexController extends Controller
 {
@@ -34,36 +35,63 @@ class IndexController extends Controller
 
     public function quiz(Request $request)
     {
+
+
         if (!$request->session()->has('quiz')) {
             $steps = Step::where('active', 1)->orderBy('sort')->get();
             $stages = [];
             $i = 1;
             foreach($steps as $step){
-                $stages[$i] = [
+                $stages['steps'][$i] = [
                     'id'=> $step->id,
                     'name'=> $step->name,
                     'received' => false,
-                    'answer' => []
+                    'answer' => [],
+                    'step' => $i
                 ];
                 $i++;
             }
             $stages['count'] = $steps->count();
             $stages['step'] = 1;
             session(['quiz' => $stages]);
+
         } else {
             $stages = session('quiz');
         }
 
-        $step = Step::with('questions')->find($stages[$stages['step']]['id']);
-
         $total = $stages['count'] +1;
-        $number = $stages['step'];
-        $benefits = $step->benefits();
+
+
+        if($request->option == 'start'){
+            $item = Arr::first($stages['steps'], function ($value) {
+                return $value['received'] == false;
+            }, $stages['count']);
+            $step = Step::with('questions')->find($item['id']);
+            $number =$item['step'];
+
+
+
+            $benefits = $step->benefits();
+            $prev = $number > 1 ? $number -1 : false;
+            $next = $number < $stages['count'] ? $number+1 : false;
+
+
+            return view('front.quiz', compact('step', 'total', 'number', 'benefits', 'prev', 'next'));
 
 
 
 
-        return view('front.quiz', compact('step', 'total', 'number', 'benefits'));
+
+        }
+
+
+        if($request->option == 'next'){
+
+            $step = Step::with('questions')->find(2);
+            $number = 2;
+
+            dd($request->all());
+        }
 
 
 
@@ -72,10 +100,43 @@ class IndexController extends Controller
 
 
 
+        //$benefits = $step->benefits();
+        //$prev = $number > 1 ? $number -1 : false;
+        //$next = $number < $stages['count'] ? $number+1 : false;
 
+
+        //return view('front.quiz', compact('step', 'total', 'number', 'benefits', 'prev', 'next'));
 
 
 
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function clean(Request $request)
+    {
+
+        $request->session()->forget('quiz');
+
+
+    }
+
+
+
 }

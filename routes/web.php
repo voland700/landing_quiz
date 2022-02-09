@@ -36,9 +36,12 @@ Route::get('/', [App\Http\Controllers\Front\IndexController::class, 'index'])->n
 Route::post('/product_detail', [App\Http\Controllers\Front\IndexController::class, 'detail'])->name('product.detail');
 
 
-//Route::post('/quiz', [App\Http\Controllers\Front\IndexController::class, 'quiz'])->name('quiz');
+Route::post('/quiz', [App\Http\Controllers\Front\IndexController::class, 'quiz'])->name('quiz');
 
-Route::get('/quiz', [App\Http\Controllers\Front\IndexController::class, 'quiz'])->name('quiz');
+//Route::get('/quiz', [App\Http\Controllers\Front\IndexController::class, 'quiz'])->name('quiz');
+
+
+Route::get('/cl2', [App\Http\Controllers\Front\IndexController::class, 'clean']);
 
 Route::group(['namespace'=>'App\Http\Controllers\Admin', 'prefix'=>'admin'], function () {
     Route::get('/', 'MainController@index')->name('admin.index');

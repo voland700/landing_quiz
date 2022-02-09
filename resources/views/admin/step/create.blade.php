@@ -83,7 +83,7 @@
                             <select id="type" name="type" class="form-control">
                                 <option value="radio" selected>Только один ответ</option>
                                 <option value="checkbox">Несколько ответов</option>
-                                <option value="left">Только тестовое поле</option>
+                                <option value="text">Только тестовое поле</option>
                             </select>
                         </div>
 

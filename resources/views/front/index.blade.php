@@ -5,7 +5,7 @@
             <div class="slide_wrap rellax" data-rellax-speed="2">
                 <h1 class="slide_h1">Поможем выбрать отопительную печь, которая <span>идеально подойдет</span> для вашего дома!</h1>
                 <p class="slide_sub">Большой выбор печей длительного горения. Пройдите простой тест на подбор идеальной печи и получите персональное предложение на установку + промокод на <span>скидку 15%</span>!</p>
-                <a href="#" class="btn btn-accent shining mr-05">Подобрать печь и узнать цену</a>
+                <a href="#" class="btn btn-accent shining mr-05 start">Подобрать печь и узнать цену</a>
                 <a href="#" class="btn btn-outline-white">Заказать звонок</a>
             </div>
 
@@ -130,20 +130,13 @@
 
     <section class="container call">
         <h2 class="call_title">Выберите удобный способ для связи</h2>
-
         <div class="call_wrup">
             <a href="tel:88007773487" class="btn-b btn-accent w290 shining">Позвонить 8-800-777-34-87</a>
             <a href="#" class="btn-b btn-outline-black w290">Написать в WhatsApp</a>
             <a href="#" class="btn-b btn-outline-black w290">Заказть звонок</a>
         </div>
-
     </section>
 
-    <script>
-
-
-
-    </script>
 
 
 @if($products)
@@ -182,7 +175,7 @@
             <p class="advice_subtitle">Максимум выгоды! После прохождения теста вы получите персональное предложение на установку печи<br>
                 + промокод на скидку 5%!</p>
             <div class="advice_btn_wrup">
-                <a href="#" class="btn-b btn-accent  w290 shining">Найти идеальную печь</a>
+                <a href="#" class="btn-b btn-accent w290 shining start">Найти идеальную печь</a>
             </div>
         </div>
     </section>

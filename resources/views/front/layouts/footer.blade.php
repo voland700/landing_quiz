@@ -4,6 +4,13 @@
             <span class="detail_closet_btn close"></span>
         </div>
     </div>
+
+    <div class="dell"  id="modal">
+        <div class="quest">
+            <div class="quest_close_wrap"><span class="quest_btn_close"></span></div>
+            <div class="quest_wrap" id="stepBody"></div>
+        </div>
+    </div>
     <footer>
         <span class="footer_txt">Печной Центр Ясенево</span>
     </footer>
