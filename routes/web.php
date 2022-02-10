@@ -42,6 +42,7 @@ Route::post('/quiz', [App\Http\Controllers\Front\IndexController::class, 'quiz']
 
 
 Route::get('/cl2', [App\Http\Controllers\Front\IndexController::class, 'clean']);
+Route::get('/gets', [App\Http\Controllers\Front\IndexController::class, 'gets']);
 
 Route::group(['namespace'=>'App\Http\Controllers\Admin', 'prefix'=>'admin'], function () {
     Route::get('/', 'MainController@index')->name('admin.index');

@@ -143,8 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 choiceExtra();
                 activeBtn();
                 nextQuiz();
-
-
+                prevQuiz();
             });
         })
     })
@@ -158,38 +157,68 @@ document.addEventListener('DOMContentLoaded', () => {
                     //method: 'POST',
                     _method: "POST",
                     _token: document.querySelector('meta[name=csrf-token]').content,
-                    body: new FormData(formBody),
                     option: 'next',
-                    data: serializeForm(formBody)
-
+                    data:  serializeForm(formBody)
                 }) .then((data) => {
+                    stepBody.innerHTML = '';
+                    stepBody.insertAdjacentHTML('beforeend', data);
+                    //console.log(data);
+                    choiceExtra();
+                    activeBtn();
+                    nextQuiz();
+                    prevQuiz();
+                });
+            }
+        });
+    }
+
+    function prevQuiz() {
+        if (document.getElementById('btnPrev')) {
+            btnPrev.onclick = function(e){
+                e.preventDefault();
+                getProduct('/quiz', {
+                    _method: "POST",
+                    _token: document.querySelector('meta[name=csrf-token]').content,
+                    option: 'prev',
+                    data: serializeForm(formBody)
+                }).then((data) => {
                     stepBody.innerHTML = '';
                     stepBody.insertAdjacentHTML('beforeend', data);
                     console.log(data);
                     choiceExtra();
                     activeBtn();
+                    nextQuiz();
+                    prevQuiz();
                 });
             }
-        });
-
+        }
     }
 
     function serializeForm(formNode) {
-        return new FormData(formNode)
+        const { elements } = formNode
+        let body = {};
+        let answers = [];
+        Array.from(elements).forEach((element) => {
+            if (element.type == 'radio' && element.checked == true && !element.value == false) {
+                body.answer = element.value
+            }
+            if (element.type == 'checkbox' && element.checked == true && !element.value == false) {
+                answers.push(element.value);
+            }
+            if (element.type == 'text' && !element.value == false) {
+                body.extra = element.value
+            }
+            if (element.type == 'hidden') {
+                body[element.name] = element.value
+            }
+            if(element.type == 'textarea' && !element.value == false ){
+                body[element.name] = element.value
+            }
+        })
+        if (answers.length) body.answer = answers;
+        //console.log(body);
+        return body;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // действия с доплнительным полем Input  - extra
     function choiceExtra(){
@@ -205,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function activeBtn(){
         const btn = document.getElementById('btnNext');
         if(btn.disabled){
-            const items = document.querySelectorAll('input[name="item"]');
+            const items = document.querySelectorAll('input[name="answer"]');
             items.forEach((item)=>{
                 item.addEventListener('change', function () {
                     btn.disabled = false;

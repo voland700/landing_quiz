@@ -19,7 +19,7 @@
             @foreach($step->questions as $question)
             <div class="quest_item">
                 <label class="quest_lable-radio">
-                    <input type="radio"  value="{{$question->name}}" class="quest_radio" name="item">
+                    <input type="radio"  value="{{$question->name}}" class="quest_radio" name="answer">
                     <span class="quest_item_name">{{$question->name}}</span>
                 </label>
             </div>
@@ -27,7 +27,7 @@
             @if($step->extra)
             <div class="quest_item">
                 <label class="quest_lable-radio-inp">
-                    <input type="radio" value="2" class="quest_radio" id="extraRadio" vavue="" name="item" placeholder="Другое...">
+                    <input type="radio" class="quest_radio" id="extraRadio"  name="answer" placeholder="Другое...">
                     <span class="quest_item_name-inp">
 					    <input type="text" class="quest_radio-input" id="extraText" name="extra" vavue="" placeholder="Другое...">
 					</span>
@@ -40,7 +40,7 @@
             @foreach($step->questions as $question)
             <div class="quest_item">
                 <label class="quest_lable-radio">
-                    <input type="checkbox"  value="{{$question->name}}" class="quest_checkbox" name="item">
+                    <input type="checkbox"  value="{{$question->name}}" class="quest_checkbox" name="answer">
                     <span class="quest_item_name_2">{{$question->name}}</span>
                 </label>
             </div>
@@ -48,7 +48,7 @@
             @if($step->extra)
             <div class="quest_item">
                 <label class="quest_lable-radio-inp">
-                    <input type="checkbox" value="2" class="quest_checkbox" vavue="" name="item" id="extraRadio">
+                    <input type="checkbox" class="quest_checkbox" name="answer" id="extraRadio">
                     <span class="quest_item_name_2-inp">
 				        <input type="text" class="quest_radio-input" vavue="extra" id="extraText" placeholder="Другое...">
                     </span>
@@ -67,7 +67,7 @@
             <span>Шаг:</span> <span class="stap_namber">{{$number}}</span> <span>из</span> <span>{{$total}}</span>
         </div>
         <div class="quest_footer_btn_wrap" >
-            <button class="stap_btn_back" @if($number == 1) disabled="disabled" @endif>
+            <button class="stap_btn_back" @if($prev == 'false') disabled="disabled" @else id="btnPrev" @endif >
 			    <span class="back_icon">
                     <svg viewBox="0 0 24 24" class="mdi-icon mdi-24px">
 				        <title>mdi-arrow-left</title>
