@@ -36,9 +36,16 @@ Route::get('/', [App\Http\Controllers\Front\IndexController::class, 'index'])->n
 Route::post('/product_detail', [App\Http\Controllers\Front\IndexController::class, 'detail'])->name('product.detail');
 
 
-Route::post('/quiz', [App\Http\Controllers\Front\IndexController::class, 'quiz'])->name('quiz');
-
+//Route::post('/quiz', [App\Http\Controllers\Front\IndexController::class, 'quiz'])->name('quiz');
 //Route::get('/quiz', [App\Http\Controllers\Front\IndexController::class, 'quiz'])->name('quiz');
+
+Route::post('/start', [App\Http\Controllers\Front\IndexController::class, 'start'])->name('start');
+Route::post('/next', [App\Http\Controllers\Front\IndexController::class, 'next'])->name('next');
+Route::post('/prev', [App\Http\Controllers\Front\IndexController::class, 'prev'])->name('prev');
+
+
+
+//Route::get('/start', [App\Http\Controllers\Front\IndexController::class, 'start'])->name('start');
 
 
 Route::get('/cl2', [App\Http\Controllers\Front\IndexController::class, 'clean']);

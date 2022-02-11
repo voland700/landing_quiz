@@ -4,15 +4,15 @@
         <p class="last_subtitle">Как с вами связаться, чтобы сообщить результаты?</p>
         <p class="last_p">Промокод на скидку 5% вы получите сразу после отправки формы.</p>
         @if($benefits)
-        <h4 class="last_offer_title">Ваши бонусы</h4>
-        <div class="last_offer_wrap">
-            @foreach($benefits as $benefit)
-            <div class="quest_offer_item">
-                <img src="{{ $benefit->getImage() }}" alt="Offer" class="quest_offer_icon">
-                <div class="quest_offer_text">{{ $benefit->name }}</div>
+            <h4 class="last_offer_title">Ваши бонусы</h4>
+            <div class="last_offer_wrap">
+                @foreach($benefits as $benefit)
+                    <div class="quest_offer_item">
+                        <img src="{{ $benefit->getImage() }}" alt="Offer" class="quest_offer_icon">
+                        <div class="quest_offer_text">{{ $benefit->name }}</div>
+                    </div>
+                @endforeach
             </div>
-            @endforeach
-        </div>
         @endif
     </div>
 </div>

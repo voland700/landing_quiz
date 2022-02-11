@@ -4,7 +4,7 @@
     <input type="hidden" name="step" value="{{$number}}">
     <input type="hidden" name="prev" value="{{$prev}}">
     <input type="hidden" name="next" value="{{$next}}">
-    <h3 class="quest_title">{{$step->name}}</h3>
+    <h3 class="quest_title">{{ $step->name }}</h3>
     <div class="quest_inner">
 
         @if($step->type =='checkbox' || !$step->obligatory )
@@ -76,7 +76,7 @@
                 </span>
             </button>
 
-            @if($number == $total-1)
+            @if($number == $total-1 && $next == false)
                 <button class="stap_btn_next last blick" id="btnNext" @if($step->obligatory) disabled="disabled" @endif>Последний шаг</button>
             @else
             <button class="stap_btn_next blick" id="btnNext" @if($step->obligatory) disabled="disabled" @endif>Далее

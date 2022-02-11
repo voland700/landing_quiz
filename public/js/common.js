@@ -127,19 +127,16 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.toggle("show");
     });
 
-
     document.querySelectorAll('.start').forEach((item) => {
         item.addEventListener('click', function (e) {
-
-            getProduct('/quiz', {
-                _token: document.querySelector('meta[name=csrf-token]').content,
-                option: 'start'
+            getProduct('/start', {
+                _method: "POST",
+                _token: document.querySelector('meta[name=csrf-token]').content
             }) .then((data) => {
                 stepBody.innerHTML = '';
                 stepBody.insertAdjacentHTML('beforeend', data);
                 modal.classList.toggle("show");
-
-                //console.log(data);
+                console.log(data);
                 choiceExtra();
                 activeBtn();
                 nextQuiz();
@@ -149,50 +146,180 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     function nextQuiz(){
-        const btn = document.getElementById('btnNext');
-        btn.addEventListener('click', function (e){
-            e.preventDefault();
-            if(!btn.disabled){
+        if(document.getElementById('btnNext')){
+            btnNext.onclick = function(e) {
+                e.preventDefault();
+                if(!btnNext.disabled){
+                    getProduct('/next', {
+                        _method: "POST",
+                        _token: document.querySelector('meta[name=csrf-token]').content,
+                        data:  serializeForm(formBody)
+                    }) .then((data) => {
+                        stepBody.innerHTML = '';
+                        stepBody.insertAdjacentHTML('beforeend', data);
+                        console.log(data);
+                        choiceExtra();
+                        activeBtn();
+                        nextQuiz();
+                        prevQuiz();
+
+                        //lastQuiz();
+                    });
+                }
+            }
+        }
+    }
+
+    function prevQuiz(){
+        if(document.getElementById('btnPrev')){
+            btnPrev.onclick = function(e) {
+                e.preventDefault();
+                    getProduct('/prev', {
+                        _method: "POST",
+                        _token: document.querySelector('meta[name=csrf-token]').content,
+                        data:  serializeForm(formBody)
+                    }) .then((data) => {
+                        stepBody.innerHTML = '';
+                        stepBody.insertAdjacentHTML('beforeend', data);
+                        console.log(data);
+                        choiceExtra();
+                        activeBtn();
+                        nextQuiz();
+                        prevQuiz();
+
+                        //lastQuiz();
+                    });
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+        document.querySelectorAll('.start').forEach((item) => {
+            item.addEventListener('click', function (e) {
+
                 getProduct('/quiz', {
-                    //method: 'POST',
-                    _method: "POST",
                     _token: document.querySelector('meta[name=csrf-token]').content,
-                    option: 'next',
-                    data:  serializeForm(formBody)
+                    option: 'start'
                 }) .then((data) => {
                     stepBody.innerHTML = '';
                     stepBody.insertAdjacentHTML('beforeend', data);
+                    modal.classList.toggle("show");
+
                     //console.log(data);
                     choiceExtra();
                     activeBtn();
                     nextQuiz();
                     prevQuiz();
-                });
-            }
-        });
-    }
 
-    function prevQuiz() {
-        if (document.getElementById('btnPrev')) {
-            btnPrev.onclick = function(e){
-                e.preventDefault();
-                getProduct('/quiz', {
-                    _method: "POST",
-                    _token: document.querySelector('meta[name=csrf-token]').content,
-                    option: 'prev',
-                    data: serializeForm(formBody)
-                }).then((data) => {
-                    stepBody.innerHTML = '';
-                    stepBody.insertAdjacentHTML('beforeend', data);
-                    console.log(data);
-                    choiceExtra();
-                    activeBtn();
-                    nextQuiz();
-                    prevQuiz();
+
+                    //lastQuiz();
+                });
+            })
+        })
+
+        function nextQuiz(){
+            if(document.getElementById('btnNext')){
+                btnNext.addEventListener('click', function (e){
+                    e.preventDefault();
+                    if(!btnNext.disabled){
+                        getProduct('/quiz', {
+                            //method: 'POST',
+                            _method: "POST",
+                            _token: document.querySelector('meta[name=csrf-token]').content,
+                            option: 'next',
+                            data:  serializeForm(formBody)
+                        }) .then((data) => {
+                            stepBody.innerHTML = '';
+                            stepBody.insertAdjacentHTML('beforeend', data);
+                            //console.log(data);
+                            choiceExtra();
+                            activeBtn();
+                            nextQuiz();
+                            prevQuiz();
+
+                            //lastQuiz();
+                        });
+                    }
                 });
             }
         }
-    }
+
+        function prevQuiz() {
+            if (document.getElementById('btnPrev')) {
+                btnPrev.onclick = function(e){
+                    e.preventDefault();
+                    getProduct('/quiz', {
+                        _method: "POST",
+                        _token: document.querySelector('meta[name=csrf-token]').content,
+                        option: 'prev',
+                        data: serializeForm(formBody)
+                    }).then((data) => {
+                        stepBody.innerHTML = '';
+                        stepBody.insertAdjacentHTML('beforeend', data);
+                        console.log(data);
+                        choiceExtra();
+                        activeBtn();
+                        nextQuiz();
+                        prevQuiz();
+
+                        //lastQuiz();
+                    });
+                }
+            }
+        }
+
+        /*
+        function lastQuiz(){
+
+            if(document.getElementById('lastBtn')){
+                alert('!!!!!!!!!!');
+
+
+               lastBtn.onclick = function(e){
+
+                    e.preventDefault();
+
+                    getProduct('/quiz', {
+                        _method: "POST",
+                        _token: document.querySelector('meta[name=csrf-token]').content,
+                        option: 'last',
+                        data: serializeForm(formBody)
+                    }).then((data) => {
+                        stepBody.innerHTML = '';
+                        console.log(data);
+                        stepBody.insertAdjacentHTML('beforeend', data);
+
+                    });
+
+
+               }
+            }
+        }
+
+    */
+
+
 
     function serializeForm(formNode) {
         const { elements } = formNode
@@ -232,14 +359,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //кнопка - Next активная при выборе варианта
     function activeBtn(){
-        const btn = document.getElementById('btnNext');
-        if(btn.disabled){
-            const items = document.querySelectorAll('input[name="answer"]');
-            items.forEach((item)=>{
-                item.addEventListener('change', function () {
-                    btn.disabled = false;
+        if(document.getElementById('btnNext')){
+            const btn = document.getElementById('btnNext');
+            if(btn.disabled){
+                const items = document.querySelectorAll('input[name="answer"]');
+                items.forEach((item)=>{
+                    item.addEventListener('change', function () {
+                        btn.disabled = false;
+                    });
                 });
-            });
+            }
         }
         if (document.getElementById('textMessage')) {
             let textMessage = document.getElementById('textMessage');

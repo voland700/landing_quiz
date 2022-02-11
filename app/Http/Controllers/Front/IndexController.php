@@ -65,28 +65,34 @@ class IndexController extends Controller
             $item = Arr::first($stages['steps'], function ($value) {
                 return $value['received'] == false;
             }, $stages['count']);
-            $step = Step::with('questions')->find($item['id']);
-            $number =$item['step'];
-            $prev = !$item['step'] == 1 ? $stages['steps'][$item['step'] - 1]['id'] : false;
-            $next =  $item['step'] < $stages['count'] ? $stages['steps'][$item['step'] + 1]['id'] : false;
-            return view('front.quiz', compact('step', 'total', 'number', 'benefits', 'prev', 'next'));
+
+                $step = Step::with('questions')->find($item['id']);
+                $number =$item['step'];
+                $prev = !$item['step'] == 1 ? $stages['steps'][$item['step'] - 1]['id'] : false;
+                $next =  $item['step'] < $stages['count'] ? $stages['steps'][$item['step'] + 1]['id'] : false;
+                return view('front.quiz', compact('step', 'total', 'number', 'benefits', 'prev', 'next'));
         }
 
-        if($request->option == 'next' && !$request->data['next']  == false){
+        if($request->option == 'next'){
             $data = $request->data;
             if(array_key_exists('answer', $data)) $request->session()->push('quiz.steps.'.$data['step'].'.answer', $data['answer'] );
             if(array_key_exists('message', $data)) $request->session()->push('quiz.steps.'.$data['step'].'.message', $data['message'] );
             $request->session()->push('quiz.steps.'.$data['step'].'.received', true );
             if(array_key_exists('extra', $data)) $request->session()->push('quiz.steps.'.$data['step'].'.extra', $data['extra']);
-            $step = Step::with('questions')->find($data['next']);
-            $number = $data['step'] + 1;
-            $prev =  $stages['steps'][$data['step']]['id'];
-            $next =  $number < $stages['count'] ? $stages['steps'][$number+1]['id'] : false;
-            return view('front.quiz', compact('step', 'total', 'number', 'benefits', 'prev', 'next'));
-            //return view('front.quiz-last', compact('benefits'));
+            if(!$request->data['next']  == false){
+                $step = Step::with('questions')->find($data['next']);
+                $number = $data['step'] + 1;
+                $prev =  $stages['steps'][$data['step']]['id'];
+                $next =  $number < $stages['count'] ? $stages['steps'][$number+1]['id'] : false;
+                return view('front.quiz', compact('step', 'total', 'number', 'benefits', 'prev', 'next'));
+            }else{
+                return view('front.quiz_last', compact('benefits'));
+            }
+
+
         }
 
-        if($request->option == 'prev' && !$request->data['prev']  == false) {
+        if($request->option == 'prev') {
             $data = $request->data;
             $request->session()->push('quiz.steps.'.$data['step'].'.answer', []);
             $request->session()->push('quiz.steps.'.$data['step'].'.message', []);
@@ -98,22 +104,78 @@ class IndexController extends Controller
             $next =  $stages['steps'][$data['step']]['id'];
             return view('front.quiz', compact('step', 'total', 'number', 'benefits', 'prev', 'next'));
         }
+/*
+        if($request->option == 'last' && $request->data['prev']  == false) {
+
+            $data = $request->data;
+            $request->session()->push('quiz.steps.'.$data['step'].'.answer', []);
+            $request->session()->push('quiz.steps.'.$data['step'].'.message', []);
+            $request->session()->push('quiz.steps.'.$data['step'].'.received', false );
+            $request->session()->push('quiz.steps.'.$data['step'].'.extra', []);
+            return view('front.quiz-last', compact('benefits'));
 
 
+            //return $request->all();
+        }
+*/
+    }
 
+    public function start(Request $request)
+    {
 
+        $stages = Step::getSession();
+        $item = Arr::first($stages['steps'], function ($value) {
+            return $value['received'] == false;
+        }, $stages['count']);
 
+        $step = Step::with('questions')->find($item['id']);
+        $benefits = Benefit::where('active', 1)->select('name', 'img')->orderBy('sort')->limit(4)->get();
 
+        $total = $stages['total'];
+        $number = $item['step'];
+        $prev = !$item['step'] == 1 ? $stages['steps'][$item['step'] - 1]['id'] : false;
+        $next =  $item['step'] < $stages['count'] ? $stages['steps'][$item['step'] + 1]['id'] : false;
+        return view('front.quiz', compact('step', 'total', 'number', 'benefits', 'prev', 'next'));
+    }
 
+    public function next(Request $request)
+    {
+        $stages = Step::getSession();
+        $data = $request->data;
+        if(array_key_exists('answer', $data)) $request->session()->put('quiz.steps.'.$data['step'].'.answer', [$data['answer']]);
+        if(array_key_exists('message', $data)) $request->session()->put('quiz.steps.'.$data['step'].'.message', $data['message'] );
+        if(array_key_exists('extra', $data)) $request->session()->put('quiz.steps.'.$data['step'].'.extra', $data['extra']);
+        $request->session()->put('quiz.steps.'.$data['step'].'.received', true );
 
+        $step = Step::with('questions')->find($data['next']);
+        $benefits = Benefit::where('active', 1)->select('name', 'img')->orderBy('sort')->limit(4)->get();
 
+        $total = $stages['total'];
+        $number = $data['step'] + 1;
+        $prev =  $stages['steps'][$data['step']]['id'];
+        $next =  $number < $stages['count'] ? $stages['steps'][$number + 1]['id'] : false;
+        return view('front.quiz', compact('step', 'total', 'number', 'benefits', 'prev', 'next'));
 
+        //dd($request->all());
+    }
 
+    public function prev(Request $request)
+    {
+        $stages = Step::getSession();
+        $data = $request->data;
+        if(array_key_exists('answer', $data)) $request->session()->put('quiz.steps.'.$data['step'].'.answer');
+        if(array_key_exists('message', $data)) $request->session()->put('quiz.steps.'.$data['step'].'.message');
+        if(array_key_exists('extra', $data)) $request->session()->put('quiz.steps.'.$data['step'].'.extra');
+        $request->session()->put('quiz.steps.'.$data['step'].'.received', false );
 
+        $step = Step::with('questions')->find($data['prev']);
+        $benefits = Benefit::where('active', 1)->select('name', 'img')->orderBy('sort')->limit(4)->get();
 
-
-
-
+        $total = $stages['total'];
+        $number = $data['step'] - 1;
+        $prev =  $number > 1 ? $stages['steps'][$number - 1]['id'] : false;
+        $next =  $stages['steps'][$data['step']]['id'];
+        return view('front.quiz', compact('step', 'total', 'number', 'benefits', 'prev', 'next'));
     }
 
 
@@ -137,8 +199,8 @@ class IndexController extends Controller
 
     public function clean(Request $request)
     {
-
         $request->session()->forget('quiz');
+
 
 
     }
