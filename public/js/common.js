@@ -26,54 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-/*
-    //  for phone input: country - flags, mask, validation
-    let input = document.querySelector("#phone");
-    let errorMsg = document.querySelector("#error-msg");
-    let validMsg = document.querySelector("#valid-msg");
-    let errorMap = ["Не правльный номер", "Неверный код страны", "Слишком короткий", "Слишком длиный", "Не правльный номер"];
-    //let errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
-    let iti = window.intlTelInput(input, {
-        onlyCountries: ["ru"],
-        //preferredCountries: [ "ru", "by", "ua" ],
-        utilsScript: "../js/intlTelInput/utils.js?<%= time %>"
-        // any initialisation options go here
-    });
-
-    let reset = function() {
-        input.classList.remove("error");
-        errorMsg.innerHTML = "";
-        errorMsg.classList.add("hide");
-        validMsg.classList.add("hide");
-    };
-
-    // on blur: validate
-    input.addEventListener('blur', function() {
-        reset();
-        if (input.value.trim()) {
-            if (iti.isValidNumber()) {
-                validMsg.classList.remove("hide");
-            } else {
-                input.classList.add("error");
-                let errorCode = iti.getValidationError();
-                errorMsg.innerHTML = errorMap[errorCode];
-                errorMsg.classList.remove("hide");
-            }
-        }
-    });
-
-    // on keyup / change flag: reset
-    input.addEventListener('change', reset);
-    input.addEventListener('keyup', reset);
-
-    let cleave = new Cleave('#phone', {
-        phone: true,
-        phoneRegionCode: 'RU'
-    });
-
-*/
-
-
     document.querySelectorAll('.elem').forEach((item) => {
         item.addEventListener('click', getItem);
     });
@@ -136,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 stepBody.innerHTML = '';
                 stepBody.insertAdjacentHTML('beforeend', data);
                 modal.classList.toggle("show");
-                console.log(data);
+                //console.log(data);
                 choiceExtra();
                 activeBtn();
                 nextQuiz();
@@ -157,13 +109,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     }) .then((data) => {
                         stepBody.innerHTML = '';
                         stepBody.insertAdjacentHTML('beforeend', data);
-                        console.log(data);
+                        //console.log(data);
                         choiceExtra();
                         activeBtn();
                         nextQuiz();
                         prevQuiz();
 
-                        //lastQuiz();
+                        getResult();
                     });
                 }
             }
@@ -181,145 +133,124 @@ document.addEventListener('DOMContentLoaded', () => {
                     }) .then((data) => {
                         stepBody.innerHTML = '';
                         stepBody.insertAdjacentHTML('beforeend', data);
-                        console.log(data);
+                        //console.log(data);
                         choiceExtra();
                         activeBtn();
                         nextQuiz();
                         prevQuiz();
 
-                        //lastQuiz();
+
                     });
             }
         }
     }
 
+    function getResult(){
+        if(document.getElementById('btnResult')){
+            if(stepBody.classList.contains("quest_wrap")){
+                stepBody.classList.toggle("quest_wrap");
+                stepBody.classList.toggle("last_wrap");
+            }
 
+            let name = document.getElementById('name');
+            let validName = true;
+            let validPhone = false;
 
+            //  for phone input: country - flags, mask, validation
+            let input = document.querySelector("#phone");
+            let errorMsg = document.querySelector("#error-msg");
+            let validMsg = document.querySelector("#valid-msg");
+            let errorMap = ["Не правльный номер", "Неверный код страны", "Слишком короткий", "Слишком длиный", "Не правльный номер"];
+            let iti = window.intlTelInput(input, {
+                onlyCountries: ["ru"],
+                utilsScript: "../js/intlTelInput/utils.js?<%= time %>"
+            });
 
+            let reset = function() {
+                input.classList.remove("error");
+                errorMsg.innerHTML = "";
+                errorMsg.classList.add("hide");
+                validMsg.classList.add("hide");
+            };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
-        document.querySelectorAll('.start').forEach((item) => {
-            item.addEventListener('click', function (e) {
-
-                getProduct('/quiz', {
-                    _token: document.querySelector('meta[name=csrf-token]').content,
-                    option: 'start'
-                }) .then((data) => {
-                    stepBody.innerHTML = '';
-                    stepBody.insertAdjacentHTML('beforeend', data);
-                    modal.classList.toggle("show");
-
-                    //console.log(data);
-                    choiceExtra();
-                    activeBtn();
-                    nextQuiz();
-                    prevQuiz();
-
-
-                    //lastQuiz();
-                });
-            })
-        })
-
-        function nextQuiz(){
-            if(document.getElementById('btnNext')){
-                btnNext.addEventListener('click', function (e){
-                    e.preventDefault();
-                    if(!btnNext.disabled){
-                        getProduct('/quiz', {
-                            //method: 'POST',
-                            _method: "POST",
-                            _token: document.querySelector('meta[name=csrf-token]').content,
-                            option: 'next',
-                            data:  serializeForm(formBody)
-                        }) .then((data) => {
-                            stepBody.innerHTML = '';
-                            stepBody.insertAdjacentHTML('beforeend', data);
-                            //console.log(data);
-                            choiceExtra();
-                            activeBtn();
-                            nextQuiz();
-                            prevQuiz();
-
-                            //lastQuiz();
-                        });
+            // on blur: validate
+            input.addEventListener('blur', function() {
+                reset();
+                if (input.value.trim()) {
+                    if (iti.isValidNumber()) {
+                        validMsg.classList.remove("hide");
+                        validPhone = true;
+                    } else {
+                        input.classList.add("error");
+                        let errorCode = iti.getValidationError();
+                        errorMsg.innerHTML = errorMap[errorCode];
+                        errorMsg.classList.remove("hide");
                     }
-                });
-            }
-        }
-
-        function prevQuiz() {
-            if (document.getElementById('btnPrev')) {
-                btnPrev.onclick = function(e){
-                    e.preventDefault();
-                    getProduct('/quiz', {
-                        _method: "POST",
-                        _token: document.querySelector('meta[name=csrf-token]').content,
-                        option: 'prev',
-                        data: serializeForm(formBody)
-                    }).then((data) => {
-                        stepBody.innerHTML = '';
-                        stepBody.insertAdjacentHTML('beforeend', data);
-                        console.log(data);
-                        choiceExtra();
-                        activeBtn();
-                        nextQuiz();
-                        prevQuiz();
-
-                        //lastQuiz();
-                    });
                 }
-            }
-        }
+            });
 
-        /*
-        function lastQuiz(){
+            // on keyup / change flag: reset
+            input.addEventListener('change', reset);
+            input.addEventListener('keyup', reset);
 
-            if(document.getElementById('lastBtn')){
-                alert('!!!!!!!!!!');
+            let cleave = new Cleave('#phone', {
+                phone: true,
+                phoneRegionCode: 'RU'
+            });
+
+            btnResult.onclick = function(e) {
+                e.preventDefault();
+                if(name.value == ''){
+                    if(!name.classList.contains('error'))  name.classList.add('error');
+                    validName = false;
+                }
+                if (!iti.isValidNumber()){
+                    input.classList.add("error");
+                    validPhone = false;
+                }
+                //console.log(input.classList);
+                //console.log(validName+'  -  '+validPhone);
 
 
-               lastBtn.onclick = function(e){
-
-                    e.preventDefault();
-
-                    getProduct('/quiz', {
+                if(validName && validPhone){
+                    getProduct('/result', {
                         _method: "POST",
                         _token: document.querySelector('meta[name=csrf-token]').content,
-                        option: 'last',
-                        data: serializeForm(formBody)
-                    }).then((data) => {
+                        name: name.value,
+                        phone: input.value
+                    }) .then((data) => {
                         stepBody.innerHTML = '';
-                        console.log(data);
-                        stepBody.insertAdjacentHTML('beforeend', data);
+                        //stepBody.insertAdjacentHTML('beforeend', data);
+                        //console.log(data);
 
                     });
 
 
-               }
+
+
+                }
+
             }
+
+
+
+
+
+
+
+
         }
 
-    */
 
 
+
+
+
+
+
+
+
+    }
 
     function serializeForm(formNode) {
         const { elements } = formNode
@@ -360,12 +291,11 @@ document.addEventListener('DOMContentLoaded', () => {
     //кнопка - Next активная при выборе варианта
     function activeBtn(){
         if(document.getElementById('btnNext')){
-            const btn = document.getElementById('btnNext');
-            if(btn.disabled){
+            if(btnNext.disabled){
                 const items = document.querySelectorAll('input[name="answer"]');
                 items.forEach((item)=>{
                     item.addEventListener('change', function () {
-                        btn.disabled = false;
+                        btnNext.disabled = false;
                     });
                 });
             }

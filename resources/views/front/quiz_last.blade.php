@@ -33,7 +33,7 @@
             <span id="valid-msg" class="hide" style="display: none;"></span>
             <span id="error-msg" class="hide" style="display: none;"></span>
         </div>
-        <button type="submit" class="last-btn shining">Получить результаты</button>
+        <button type="submit" class="last-btn shining" id="btnResult">Получить результаты</button>
         <div class="last_form-agreement">
             <label class="last-checkbox">
                 <input type="checkbox" class="agreement-check" checked>
