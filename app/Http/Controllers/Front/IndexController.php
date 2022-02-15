@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Callback;
 use App\Models\Product;
 use App\Models\Result;
 use App\Models\Step;
@@ -122,8 +123,48 @@ class IndexController extends Controller
         $data = $request->all();
         $data['result'] = json_encode($result,JSON_UNESCAPED_UNICODE);
         Result::create($data);
+        $request->session()->forget('quiz');
         return ['success'=>'ok'];
     }
+
+    public function callback_show()
+    {
+        return view('front.callback');
+    }
+
+    public function callback(Request $request)
+    {
+        $callback = new Callback($request->all());
+        $callback->save();
+        return ['success'=>'ok'];
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public function getResult()

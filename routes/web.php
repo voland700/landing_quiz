@@ -43,13 +43,11 @@ Route::post('/start', [App\Http\Controllers\Front\IndexController::class, 'start
 Route::post('/next', [App\Http\Controllers\Front\IndexController::class, 'next'])->name('next');
 Route::post('/prev', [App\Http\Controllers\Front\IndexController::class, 'prev'])->name('prev');
 Route::post('/result', [App\Http\Controllers\Front\IndexController::class, 'result'])->name('result');
+Route::post('/callback', [App\Http\Controllers\Front\IndexController::class, 'callback'])->name('callback');
 
-
-//Route::get('/start', [App\Http\Controllers\Front\IndexController::class, 'start'])->name('start');
+Route::get('/show-callback', [App\Http\Controllers\Front\IndexController::class, 'callback_show']);
 
 Route::get('/get-result', [App\Http\Controllers\Front\IndexController::class, 'getResult']);
-
-
 Route::get('/cl2', [App\Http\Controllers\Front\IndexController::class, 'clean']);
 Route::get('/gets', [App\Http\Controllers\Front\IndexController::class, 'gets']);
 
@@ -62,10 +60,8 @@ Route::group(['namespace'=>'App\Http\Controllers\Admin', 'prefix'=>'admin'], fun
     Route::resource('questions', QuestionController::class);
     Route::resource('benefits', BenefitController::class);
     Route::post('/benefits-remove-img','BenefitController@remove_img')->name('benefits.remove.img');
-
     Route::post('questions-add','QuestionController@add')->name('questions.add');
-
-
+    Route::resource('results', ResultController::class);
 });
 
 

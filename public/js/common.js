@@ -219,37 +219,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         name: name.value,
                         phone: input.value
                     }) .then((data) => {
+                        modal.classList.toggle("show");
                         stepBody.innerHTML = '';
-                        //stepBody.insertAdjacentHTML('beforeend', data);
-                        //console.log(data);
-
+                        createModal();
                     });
-
-
-
-
                 }
-
             }
-
-
-
-
-
-
-
-
         }
-
-
-
-
-
-
-
-
-
-
     }
 
     function serializeForm(formNode) {
@@ -304,13 +280,167 @@ document.addEventListener('DOMContentLoaded', () => {
             let textMessage = document.getElementById('textMessage');
             if (textMessage.value == '') {
                 textMessage.oninput = function () {
-                    if (btn.disabled) {
-                        btn.disabled = false;
-                    } else {
-                        return false;
+                    if(document.getElementById('btnNext')) {
+                        if (btnNext.disabled) {
+                            btnNext.disabled = false;
+                        } else {
+                            return false;
+                        }
                     }
                 };
             }
+        }
+    }
+
+    //modal windows - create and remove;
+    function createModal(cls='success', h3= 'Данные отправлены', sub='В ближайшее время, мы с Вами свяжемся'){
+        let modal = document.createElement('div');
+        let wrap = document.createElement('div');
+        let crosBtnWrap = document.createElement('div');
+        let crosBtn = document.createElement('span');
+        let inner = document.createElement('div');
+        let body = document.createElement('div');
+        let icon = document.createElement('div');
+        let title = document.createElement('h3');
+        let subtitle = document.createElement('p');
+        let wrapBtn = document.createElement('div');
+        let btn = document.createElement('button');
+        wrap.className = 'collback';
+        crosBtnWrap.className = 'quest_close_wrap';
+        crosBtn.className = 'quest_btn_close';
+        crosBtn.onclick = function () {
+            moadalClosed();
+        }
+        modal.classList.add('dell', 'show');
+        modal.id = 'modal';
+        inner.className = 'collback_wrap'
+        body.className = 'mod_body';
+        icon.className = 'mod_icon_wrap';
+        icon.classList.add(cls);
+        title.className = 'mod_title';
+        title.textContent = h3;
+        subtitle.className = 'mod_subtitle';
+        subtitle.textContent = sub;
+        wrapBtn.className = 'modal_call_footer';
+        btn.classList.add('btn', 'btn-primary', 'm-0a');
+        btn.innerText = 'Закрыть';
+        btn.onclick = function () {
+            moadalClosed();
+        }
+        crosBtnWrap.append(crosBtn);
+        wrapBtn.append(btn);
+        body.prepend(icon);
+        body.append(title);
+        body.append(subtitle);
+        inner.append(body);
+        inner.append(wrapBtn);
+        wrap.prepend(crosBtnWrap);
+        wrap.append(inner);
+        modal.append(wrap);
+        document.querySelector('body').prepend(modal);
+        function moadalClosed(){
+            if(modal.classList.contains('show')){
+                modal.classList.toggle('show');
+                modal.classList.toggle('hide');
+            }
+            setTimeout(function(){
+                modal.remove();
+            }, 500);
+        }
+        setTimeout(moadalClosed, 4000);
+    }
+
+
+    function ShowCallBack(){
+        fetch('/show-callback')
+            .then((response) => {
+                return response.text();
+            })
+            .then((data) => {
+                document.querySelector('body').insertAdjacentHTML('beforeend', data);
+                SendCallBack();
+                new Cleave('#CallBackPhone', {
+                    phone: true,
+                    phoneRegionCode: 'RU'
+                });
+            });
+    }
+
+    //Кнопка - событие модального окна CallBack - отладка, удалить
+    document.getElementById('callMe').onclick = function (e){
+        e.preventDefault();
+        ShowCallBack();
+    }
+
+    function SendCallBack(){
+        let callBack = document.getElementById('callBack');
+
+        const CollBackName = document.getElementById('CollBackName');
+        const CallBackPhone = document.getElementById('CallBackPhone');
+        const CollBackNameValidate = document.getElementById('CollBackNameValidate');
+        const CallBackPhoneValidate = document.getElementById('CallBackPhoneValidate');
+        let valid = true;
+
+        CollBackName.onfocus = function () {
+            if (this.classList.contains('invalid')) {
+                this.classList.remove('invalid');
+                CollBackNameValidate.innerText = "";
+                valid = true;
+            }
+        };
+
+        CallBackPhone.onfocus = function () {
+            if (this.classList.contains('invalid')) {
+                this.classList.remove('invalid');
+                CallBackPhoneValidate.innerText = "";
+                valid = true;
+            }
+        };
+
+        document.getElementById('btnCallback').onclick = function(e){
+            e.preventDefault();
+            if (CollBackName.value.trim() === '') {
+                if (!CollBackName.classList.contains('invalid')) CollBackName.classList.add('invalid');
+                CollBackNameValidate.innerText = 'Укажите Ваше имя';
+                valid = false;
+            }
+            if (CallBackPhone.value.trim() === '') {
+                if (!CallBackPhone.classList.contains('invalid')) CallBackPhone.classList.add('invalid');
+                CallBackPhoneValidate.innerText = 'Укажите номер телефона';
+                valid = false;
+            }
+            if (document.getElementById('CallBackAgreement').checked == false) valid = false;
+
+            if(!valid) {
+                return false;
+            } else {
+                getProduct('/callback', {
+                    _method: "POST",
+                    _token: document.querySelector('meta[name=csrf-token]').content,
+                    name: CollBackName.value,
+                    phone: CallBackPhone.value
+                }) .then((data) => {
+                    callbackClosed();
+                    setTimeout(function(){
+                        createModal('success', 'Данные отправлены', 'В ближайшее время, мы Вам перезвоним');
+                    }, 500);
+                });
+            }
+        }
+
+        document.getElementById('btnCallbackCross').onclick = function(e){
+            e.preventDefault();
+            callbackClosed();
+        }
+
+        function callbackClosed(){
+            if(callBack.classList.contains('show')){
+                callBack.classList.toggle('show');
+                callBack.classList.toggle('hide');
+            }
+            setTimeout(function(){
+                callBack.remove();
+            }, 500);
         }
     }
 

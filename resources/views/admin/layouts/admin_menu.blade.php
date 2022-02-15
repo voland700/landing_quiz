@@ -2,6 +2,23 @@
     <a href="#" class="nav-link">
         <i class="nav-icon far fa-list-alt"></i>
         <p>
+            Заявки
+            <i class="right fas fa-angle-left"></i>
+        </p>
+    </a>
+    <ul class="nav nav-treeview" style="display: block;">
+        <li class="nav-item">
+            <a href="{{route('results.index')}}" class="nav-link">
+                <i class="fas fa-cart-arrow-down nav-icon"></i>
+                <p>Заказы</p>
+            </a>
+        </li>
+    </ul>
+</li>
+<li class="nav-item menu-is-opening menu-open">
+    <a href="#" class="nav-link">
+        <i class="nav-icon far fa-list-alt"></i>
+        <p>
             Товары
             <i class="right fas fa-angle-left"></i>
         </p>

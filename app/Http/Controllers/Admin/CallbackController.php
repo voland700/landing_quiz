@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Result;
 use Illuminate\Http\Request;
 
-class ResultController extends Controller
+class CallbackController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +14,7 @@ class ResultController extends Controller
      */
     public function index()
     {
-        $results = Result::paginate(40);
-        return view('admin.results.index', compact('results'));
+        //
     }
 
     /**
@@ -48,14 +46,7 @@ class ResultController extends Controller
      */
     public function show($id)
     {
-        $result = Result::find($id);
-        if($result->shown == 0) {
-            $result->shown++;
-            $result->update();
-        }
-        $data = json_decode($result->result);
-        return view('admin.results.show', compact('result', 'data'));
-
+        //
     }
 
     /**
@@ -89,8 +80,6 @@ class ResultController extends Controller
      */
     public function destroy($id)
     {
-        $result = Result::find($id);
-        $result->delete();
-        return redirect()->route('results.index')->with('success', 'Данные удалены');
+        //
     }
 }

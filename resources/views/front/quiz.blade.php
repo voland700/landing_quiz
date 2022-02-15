@@ -67,7 +67,7 @@
             <span>Шаг:</span> <span class="stap_namber">{{$number}}</span> <span>из</span> <span>{{$total}}</span>
         </div>
         <div class="quest_footer_btn_wrap" >
-            <button class="stap_btn_back" @if($prev == 'false') disabled="disabled" @else id="btnPrev" @endif >
+            <button class="stap_btn_back" @if($prev == false) disabled="disabled" @else id="btnPrev" @endif >
 			    <span class="back_icon">
                     <svg viewBox="0 0 24 24" class="mdi-icon mdi-24px">
 				        <title>mdi-arrow-left</title>
