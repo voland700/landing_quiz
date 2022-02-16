@@ -13,6 +13,18 @@
                 <p>Заказы</p>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{route('callbacks.index')}}" class="nav-link">
+                <i class="fas fa-phone-volume nav-icon"></i>
+                <p>Обратный звонок</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{route('issues.index')}}" class="nav-link">
+                <i class="fas fa-comment-dollar nav-icon"></i>
+                <p>Запросы цен</p>
+            </a>
+        </li>
     </ul>
 </li>
 <li class="nav-item menu-is-opening menu-open">

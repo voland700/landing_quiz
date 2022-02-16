@@ -42,6 +42,6 @@
                 пн-вс: 9-00 до 19-00
             </div>
         </div>
-        <a href="#" class="btn btn-accent" id="callMe">Заказать звонок</a>
+        <a class="btn btn-accent callme">Заказать звонок</a>
     </div>
 </header>

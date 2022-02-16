@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Callback;
+use App\Models\Issue;
 use App\Models\Product;
 use App\Models\Result;
 use App\Models\Step;
@@ -51,11 +52,6 @@ class IndexController extends Controller
 
         $total = $stages['total'];
         $number = $item['step'];
-
-
-
-
-
 
         $prev =  $item['step'] > 1 ? $stages['steps'][$item['step'] - 1]['id'] : false;
         $next =  $item['step'] < $stages['count'] ? $stages['steps'][$item['step'] + 1]['id'] : false;
@@ -138,6 +134,26 @@ class IndexController extends Controller
         $callback->save();
         return ['success'=>'ok'];
     }
+
+    public function ask_price(Request $request)
+    {
+        $product = Product::select('id','name')->find($request->id);
+        return view('front.issue', compact('product'));
+    }
+    public function ask_store(Request $request)
+    {
+
+        $issue = new Issue($request->all());
+        //$issue->name = $request->name;
+        //$issue->phone = $request->phone;
+        //$issue->product_id = $request->id;
+        $issue->save();
+        return ['success'=>'ok'];
+
+
+        //return $request->all();
+    }
+
 
 
 

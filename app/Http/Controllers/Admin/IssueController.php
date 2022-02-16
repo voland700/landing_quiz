@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Callback;
+use App\Models\Issue;
 use Illuminate\Http\Request;
 
-class CallbackController extends Controller
+class IssueController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class CallbackController extends Controller
      */
     public function index()
     {
-        $callbacks = Callback::paginate(40);
-        return view('admin.callback.index', compact('callbacks'));
+        $issues = Issue::paginate(40);
+        return view('admin.issue.index', compact('issues'));
     }
 
     /**
@@ -48,12 +48,12 @@ class CallbackController extends Controller
      */
     public function show($id)
     {
-        $callback = Callback::find($id);
-        if($callback->shown == 0) {
-            $callback->shown++;
-            $callback->update();
+       $issue = Issue::find($id);
+        if($issue->shown == 0) {
+            $issue->shown++;
+            $issue->update();
         }
-        return view('admin.callback.show', compact('callback'));
+        return view('admin.issue.show', compact('issue'));
     }
 
     /**
@@ -87,8 +87,6 @@ class CallbackController extends Controller
      */
     public function destroy($id)
     {
-        $callback = Callback::find($id);
-        $callback->delete();
-        return redirect()->route('callbacks.index')->with('success', 'Данные удалены');
+        //
     }
 }

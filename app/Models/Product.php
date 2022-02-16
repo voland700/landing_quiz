@@ -29,6 +29,10 @@ class Product extends Model
     {
         return $this->hasMany(Property::class);
     }
+    public function issue()
+    {
+        return $this->hasOne(Issue::class);
+    }
 
     //Accessors
     public function getPictureAttribute()

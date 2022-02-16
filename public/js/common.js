@@ -48,27 +48,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getItem(e){
         e.preventDefault();
-        let detail = document.getElementById('detail');
 
         getProduct('/product_detail', {
             _token: document.querySelector('meta[name=csrf-token]').content,
             id: e.target.dataset.id
         }) .then((data) => {
-            detail.insertAdjacentHTML('beforeend', data);
-            detail.classList.toggle("show");
+            document.querySelector('body').insertAdjacentHTML('beforeend', data);
+            ProductDown();
         });
 
-        document.querySelector('.detail_closet_back').addEventListener('click', function (e){
-            e.preventDefault();
-            document.querySelector('.detail_container').remove();
-            detail.classList.toggle("show");
-        });
-        document.querySelector('.detail_closet_btn').addEventListener('click', function (e){
-            e.preventDefault();
-            document.querySelector('.detail_container').remove();
-            detail.classList.toggle("show");
-        });
+        function ProductDown(){
+            let product = document.getElementById('product');
+            document.getElementById('detailClosed').onclick = function (e){
+                e.preventDefault();
+                getProductClosed();
+            }
+            document.getElementById('detailBack').onclick = function (e){
+                e.preventDefault();
+                getProductClosed();
+            }
+            function getProductClosed() {
+                if (product.classList.contains('show')) {
+                    product.classList.toggle('show');
+                    product.classList.toggle('hide');
+                }
+                setTimeout(function () {
+                    product.remove();
+                }, 700);
+            }
+        }
     }
+
+    //QUIZ - отложенный запуск квиза после загрузки страницы
+
+    setTimeout(function () {
+            startQuiz();
+    }, 10000);
+
 
     //QUIZ - модальное окно, обмен данными
     const modal = document.getElementById('modal');
@@ -80,22 +96,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.querySelectorAll('.start').forEach((item) => {
-        item.addEventListener('click', function (e) {
-            getProduct('/start', {
-                _method: "POST",
-                _token: document.querySelector('meta[name=csrf-token]').content
-            }) .then((data) => {
-                stepBody.innerHTML = '';
-                stepBody.insertAdjacentHTML('beforeend', data);
-                modal.classList.toggle("show");
-                //console.log(data);
-                choiceExtra();
-                activeBtn();
-                nextQuiz();
-                prevQuiz();
-            });
-        })
-    })
+        item.addEventListener('click', function (e){
+            e.preventDefault();
+            startQuiz();
+        });
+    });
+
+
+    function startQuiz() {
+        getProduct('/start', {
+            _method: "POST",
+            _token: document.querySelector('meta[name=csrf-token]').content
+        }) .then((data) => {
+            stepBody.innerHTML = '';
+            stepBody.insertAdjacentHTML('beforeend', data);
+            modal.classList.toggle("show");
+            //console.log(data);
+            choiceExtra();
+            activeBtn();
+            nextQuiz();
+            prevQuiz();
+        });
+    }
 
     function nextQuiz(){
         if(document.getElementById('btnNext')){
@@ -367,10 +389,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //Кнопка - событие модального окна CallBack - отладка, удалить
-    document.getElementById('callMe').onclick = function (e){
-        e.preventDefault();
-        ShowCallBack();
-    }
+    document.querySelectorAll('.callme').forEach((item)=>{
+        item.onclick = function (e){
+            e.preventDefault();
+            ShowCallBack();
+        }
+    });
 
     function SendCallBack(){
         let callBack = document.getElementById('callBack');
@@ -443,24 +467,108 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 500);
         }
     }
+    // request products prices
+    document.querySelectorAll('.ask').forEach((i)=>{
+        i.onclick = function(e){
+            e.preventDefault();
+            getFormAskPrice(e);
+        }
+    });
 
+    function getFormAskPrice(e){
+        getProduct('/ask-price', {
+            _method: "POST",
+            _token: document.querySelector('meta[name=csrf-token]').content,
+            id: e.target.dataset.id
+        }) .then((data) => {
+            document.querySelector('body').insertAdjacentHTML('beforeend', data);
+            storeAscPrice()
+            new Cleave('#CallBackPhone', {
+                phone: true,
+                phoneRegionCode: 'RU'
+            });
+            document.getElementById('btnCallbackCross').onclick = function (e){
+                e.preventDefault();
+                getPriceClosed();
+            }
+        });
+    }
 
+    function storeAscPrice() {
+        let getPriceModal = document.getElementById('getPriceModal');
 
+        const CollBackName = document.getElementById('CollBackName');
+        const CallBackPhone = document.getElementById('CallBackPhone');
+        const CollBackNameValidate = document.getElementById('CollBackNameValidate');
+        const CallBackPhoneValidate = document.getElementById('CallBackPhoneValidate');
+        let valid = true;
 
+        CollBackName.onfocus = function () {
+            if (this.classList.contains('invalid')) {
+                this.classList.remove('invalid');
+                CollBackNameValidate.innerText = "";
+                valid = true;
+            }
+        };
 
+        CallBackPhone.onfocus = function () {
+            if (this.classList.contains('invalid')) {
+                this.classList.remove('invalid');
+                CallBackPhoneValidate.innerText = "";
+                valid = true;
+            }
+        };
 
+        document.getElementById('btnGetPrice').onclick = function (e) {
+            e.preventDefault();
+            if (CollBackName.value.trim() === '') {
+                if (!CollBackName.classList.contains('invalid')) CollBackName.classList.add('invalid');
+                CollBackNameValidate.innerText = 'Укажите Ваше имя';
+                valid = false;
+            }
+            if (CallBackPhone.value.trim() === '') {
+                if (!CallBackPhone.classList.contains('invalid')) CallBackPhone.classList.add('invalid');
+                CallBackPhoneValidate.innerText = 'Укажите номер телефона';
+                valid = false;
+            }
+            if (document.getElementById('CallBackAgreement').checked == false) valid = false;
 
+            if (!valid) {
+                return false;
+            } else {
+                getProduct('/ask-store', {
+                    _method: "POST",
+                    _token: document.querySelector('meta[name=csrf-token]').content,
+                    name: CollBackName.value,
+                    phone: CallBackPhone.value,
+                    product_id: btnGetPrice.dataset.id
+                }).then((data) => {
+                    getPriceClosed();
+                    setTimeout(function () {
+                        createModal('success', 'Данные отправлены', 'В ближайшее время, мы Вам перезвоним');
+                    }, 600);
 
+                });
+            }
+        }
+    }
 
+    function getPriceClosed() {
+        if (getPriceModal.classList.contains('show')) {
+            getPriceModal.classList.toggle('show');
+            getPriceModal.classList.toggle('hide');
+        }
+        setTimeout(function () {
+            getPriceModal.remove();
+        }, 700);
+    }
 
-
-
-
-
-
-
-
-
+    document.querySelectorAll('.social_item').forEach((item)=>{
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            window.open(item.dataset.url);
+        });
+    });
 
 
 

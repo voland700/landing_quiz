@@ -47,6 +47,10 @@ Route::post('/callback', [App\Http\Controllers\Front\IndexController::class, 'ca
 
 Route::get('/show-callback', [App\Http\Controllers\Front\IndexController::class, 'callback_show']);
 
+Route::post('/ask-price', [App\Http\Controllers\Front\IndexController::class, 'ask_price']);
+Route::post('/ask-store', [App\Http\Controllers\Front\IndexController::class, 'ask_store'])->name('ask_store');
+
+
 Route::get('/get-result', [App\Http\Controllers\Front\IndexController::class, 'getResult']);
 Route::get('/cl2', [App\Http\Controllers\Front\IndexController::class, 'clean']);
 Route::get('/gets', [App\Http\Controllers\Front\IndexController::class, 'gets']);
@@ -62,6 +66,9 @@ Route::group(['namespace'=>'App\Http\Controllers\Admin', 'prefix'=>'admin'], fun
     Route::post('/benefits-remove-img','BenefitController@remove_img')->name('benefits.remove.img');
     Route::post('questions-add','QuestionController@add')->name('questions.add');
     Route::resource('results', ResultController::class);
+
+    Route::resource('callbacks', CallbackController::class);
+    Route::resource('issues', IssueController::class);
 });
 
 

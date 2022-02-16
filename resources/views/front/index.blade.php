@@ -2,11 +2,11 @@
 @section('content')
     <section class="slide" style="background-image: url(/images/src/SLID.jpg)">
         <div class="container slide_container">
-            <div class="slide_wrap rellax" data-rellax-speed="2">
+            <div class="slide_wrap rellax" data-rellax-speed="3">
                 <h1 class="slide_h1">Поможем выбрать отопительную печь, которая <span>идеально подойдет</span> для вашего дома!</h1>
                 <p class="slide_sub">Большой выбор печей длительного горения. Пройдите простой тест на подбор идеальной печи и получите персональное предложение на установку + промокод на <span>скидку 15%</span>!</p>
-                <a href="#" class="btn btn-accent shining mr-05 start">Подобрать печь и узнать цену</a>
-                <a href="#" class="btn btn-outline-white">Заказать звонок</a>
+                <a class="btn-d btn-accent shining mr-05 start">Подобрать печь и узнать цену</a>
+                <a class="btn-d btn-outline-white callme">Заказать звонок</a>
             </div>
 
             <div class="slide_info rellax" data-rellax-speed="1">
@@ -131,9 +131,9 @@
     <section class="container call">
         <h2 class="call_title">Выберите удобный способ для связи</h2>
         <div class="call_wrup">
-            <a href="tel:88007773487" class="btn-b btn-accent w290 shining">Позвонить 8-800-777-34-87</a>
-            <a href="#" class="btn-b btn-outline-black w290">Написать в WhatsApp</a>
-            <a href="#" class="btn-b btn-outline-black w290">Заказть звонок</a>
+            <a href="tel: 88007773487" class="btn-b btn-accent w290 shining">Позвонить 8-800-777-34-87</a>
+            <a href="https://wa.me/79099928462" class="btn-b btn-outline-black w290">Написать в WhatsApp</a>
+            <a class="btn-b btn-outline-black w290 callme">Заказть звонок</a>
         </div>
     </section>
 
@@ -159,8 +159,8 @@
                     <h3 class="product_h3 elem" data-id="{{$product->id}}">{{$product->name}}</h3>
                     <div class="product_summary">{!! $product->summary !!}</div>
                     <div class="product_btn_block">
-                        <a href="#" class="product_btn ask">Узнать цену</a>
-                        <a href="#" class="product_btn more elem" data-id="{{$product->id}}">Подробнее</a>
+                        <a class="product_btn ask" data-id="{{$product->id}}">Узнать цену</a>
+                        <a class="product_btn more elem" data-id="{{$product->id}}">Подробнее</a>
                     </div>
                 </div>
                 @endforeach
@@ -175,12 +175,10 @@
             <p class="advice_subtitle">Максимум выгоды! После прохождения теста вы получите персональное предложение на установку печи<br>
                 + промокод на скидку 5%!</p>
             <div class="advice_btn_wrup">
-                <a href="#" class="btn-b btn-accent w290 shining start">Найти идеальную печь</a>
+                <a class="btn-b btn-accent w290 shining start">Найти идеальную печь</a>
             </div>
         </div>
     </section>
-
-
     <section class="container advantage">
         <h2 class="advantage_title">Почему тысячи клиентов в центральной части России выбирают «Печной Центр»</h2>
 
@@ -223,11 +221,11 @@
             <div class="map_info_address">Москва, 38 км. МКАД, вл. 4Б стр. 1 пн-вс: 9-00 до 19-00</div>
 
             <div class="map_info_media_wrap">
-                <span class="social_item fb" data-url="facebook.com"><span class="icon-fb"></span></span>
+                <span class="social_item fb" data-url="https://www.facebook.com/skandinavskie.kaminy"><span class="icon-fb"></span></span>
                 <span class="social_item vk" data-url="https://vk.com/pechnik_su"><span class="icon-vk"></span></span>
                 <span class="social_item ok" data-url="https://ok.ru"><span class="icon-ok"></span></span>
                 <span class="social_item yortube" data-url="https://www.youtube.com/channel/UCPY3HLf3_tcm78QPJqp3g-A"><span class="icon-yortube"></span></span>
-                <span class="social_item inst" data-url="https://www.instagram.com/"><span class="icon-inst"></span></span>
+                <span class="social_item inst" data-url="https://www.instagram.com/skandinavskie_kaminy/"><span class="icon-inst"></span></span>
                 <span class="social_item v-up" data-url="https://www.whatsapp.com"><span class="icon-v-up"></span></span>
             </div>
         </div>
